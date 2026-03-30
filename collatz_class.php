@@ -2,11 +2,9 @@
 
 class Collatz
 {
-
     private $startNumber;
-    private $results = [];
+    protected $results = [];
 
-    // Constructor
     public function __construct($number)
     {
         $this->startNumber = $number;
@@ -14,7 +12,6 @@ class Collatz
 
     public function calculate($n)
     {
-
         $iterations = 0;
         $maxValue = $n;
         $current = $n;
@@ -39,20 +36,16 @@ class Collatz
             "maxValue" => $maxValue
         ];
     }
+
     public function calculateInterval($from, $to)
     {
-
         for ($i = $from; $i <= $to; $i++) {
-
-            $result = $this->calculate($i);
-
-            $this->results[$i] = $result;
+            $this->results[$i] = $this->calculate($i);
         }
     }
 
     public function statistics()
     {
-
         $maxIterations = 0;
         $minIterations = PHP_INT_MAX;
         $maxReachedValue = 0;
@@ -86,3 +79,4 @@ class Collatz
         ];
     }
 }
+?>
