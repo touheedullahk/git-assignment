@@ -1,62 +1,88 @@
-<html>
-<body>
-
-<h2>Collatz 3x + 1 program</h2>
-
-<form method="post">
-
-Enter number :
-<input type="number" name="num">
-
-<input type="submit" value="Run">
-
-</form>
-
 <?php
 
-if(isset($_POST["num"]))
+class Collatz
 {
 
-$n = $_POST["num"];
+    private $startNumber;
+    private $results = [];
 
-echo "<br>";
-echo "Start number : ".$n;
-echo "<br><br>";
+    // Constructor
+    public function __construct($number)
+    {
+        $this->startNumber = $number;
+    }
 
-echo "Sequence : ";
-echo $n;
+    public function calculate($n)
+    {
 
-$count = 0;
+        $iterations = 0;
+        $maxValue = $n;
+        $current = $n;
 
-while($n != 1)
-{
+        while ($current != 1) {
 
- if($n % 2 == 0)
- {
+            if ($current % 2 == 0) {
+                $current = $current / 2;
+            } else {
+                $current = 3 * $current + 1;
+            }
 
- $n = $n / 2;
+            if ($current > $maxValue) {
+                $maxValue = $current;
+            }
 
- }
+            $iterations++;
+        }
 
- else
- {
+        return [
+            "iterations" => $iterations,
+            "maxValue" => $maxValue
+        ];
+    }
+    public function calculateInterval($from, $to)
+    {
 
- $n = 3*$n + 1;
+        for ($i = $from; $i <= $to; $i++) {
 
- }
+            $result = $this->calculate($i);
 
- echo " -> ".$n;
+            $this->results[$i] = $result;
+        }
+    }
 
- $count = $count + 1;
+    public function statistics()
+    {
 
+        $maxIterations = 0;
+        $minIterations = PHP_INT_MAX;
+        $maxReachedValue = 0;
+
+        $numberMaxIterations = 0;
+        $numberMinIterations = 0;
+        $numberMaxValue = 0;
+
+        foreach ($this->results as $number => $data) {
+
+            if ($data["iterations"] > $maxIterations) {
+                $maxIterations = $data["iterations"];
+                $numberMaxIterations = $number;
+            }
+
+            if ($data["iterations"] < $minIterations) {
+                $minIterations = $data["iterations"];
+                $numberMinIterations = $number;
+            }
+
+            if ($data["maxValue"] > $maxReachedValue) {
+                $maxReachedValue = $data["maxValue"];
+                $numberMaxValue = $number;
+            }
+        }
+
+        return [
+            "Number with Max Iterations" => $numberMaxIterations,
+            "Number with Min Iterations" => $numberMinIterations,
+            "Number with Max Reached Value" => $numberMaxValue
+        ];
+    }
 }
-
-echo "<br><br>";
-echo "Steps = ".$count;
-
-}
-
-?>
-
-</body>
-</html>
